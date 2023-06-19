@@ -30,6 +30,12 @@ class Board{
       {0, 0, 0, 0, 0},
       {0, 0, 0, 0, 0},
     }};
+    int pawn[2];
+    int rook[2];
+    int knight[2];
+    int bishop[2];
+    int queen[2];
+    // int king[2];
 };
 
 enum GameState {
