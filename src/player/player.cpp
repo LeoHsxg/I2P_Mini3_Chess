@@ -42,7 +42,8 @@ void write_valid_spot(std::ofstream& fout) {
   // Keep updating the output until getting killed.
   while(true) {
     // Choose a spot.
-    auto move = Player::get_move(root, 0);
+    // move -> state -> evaluation
+    auto move = Player::get_move(root, 3);
     fout << move.first.first << " " << move.first.second << " "\
          << move.second.first << " " << move.second.second << std::endl;
     
