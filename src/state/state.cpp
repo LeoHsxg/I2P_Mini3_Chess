@@ -13,6 +13,7 @@
  */
 int State::evaluate(){
   // [TODO] design your own evaluation function
+  // std::cout << "evaluate" << std::endl;
   int white = countMaterial(0);
   int black = countMaterial(1);
   int evaluation = white - black;
@@ -46,6 +47,7 @@ int State::countMaterial(int color){
         };
       }
   }
+  return material;
 }
 
 /**
@@ -76,6 +78,7 @@ State* State::next_state(Move move){
   
   if(this->game_state != WIN)
     next_state->get_legal_actions();
+  next_state->evaluation = next_state->evaluate();
   return next_state;
 }
 
@@ -240,7 +243,8 @@ void State::get_legal_actions(){
       }
     }
   }
-  std::cout << "\n";
+  // std::cout << "\n";
+  this->evaluation = this->evaluate();
   this->legal_actions = all_actions;
 }
 
