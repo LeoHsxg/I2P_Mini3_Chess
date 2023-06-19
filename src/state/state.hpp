@@ -30,11 +30,11 @@ class Board{
       {0, 0, 0, 0, 0},
       {0, 0, 0, 0, 0},
     }};
-    int pawn[2];
-    int rook[2];
-    int knight[2];
-    int bishop[2];
-    int queen[2];
+    // int pawn[2];
+    // int rook[2];
+    // int knight[2];
+    // int bishop[2];
+    // int queen[2];
     // int king[2];
 };
 
@@ -60,6 +60,7 @@ class State{
     State(Board board, int player): board(board), player(player){};
     
     int evaluate();
+    int countMaterial(int color);
     State* next_state(Move move);
     void get_legal_actions();
     std::string encode_output();

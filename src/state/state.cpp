@@ -13,9 +13,40 @@
  */
 int State::evaluate(){
   // [TODO] design your own evaluation function
-  return 0;
+  int white = countMaterial(0);
+  int black = countMaterial(1);
+  int evaluation = white - black;
+  return evaluation * ((player == 0) ? 1 : -1);
 }
 
+int State::countMaterial(int color){
+  int material = 0;
+  for(int i=0; i<BOARD_H; i+=1){
+      for(int j=0; j<BOARD_W; j+=1){
+        switch (board.board[color][i][j]){
+        case 1:
+          material += 100;
+          break;
+        case 2:
+          material += 500;
+          break;
+        case 3:
+          material += 300;
+          break;
+        case 4:
+          material += 300;
+          break;
+        case 5:
+          material += 900;
+          break;
+        case 6: // king
+          break;
+        default:
+          break;
+        };
+      }
+  }
+}
 
 /**
  * @brief return next state after the move
@@ -39,6 +70,8 @@ State* State::next_state(Move move){
   next.board[this->player][from.first][from.second] = 0;
   next.board[this->player][to.first][to.second] = moved;
   
+
+
   State* next_state = new State(next, 1-this->player);
   
   if(this->game_state != WIN)
