@@ -15,12 +15,10 @@
 Move Player::get_move(State *state, int depth){
   if(!state->legal_actions.size())
     state->get_legal_actions();
-  int maxValue = -100000, tmp, num = 0;
+  int maxValue = -100000, num = 0;
   auto actions = state->legal_actions;
-  // if(depth == 0 || state->game_state == DRAW || state->game_state == WIN)
-  //   return num;
   for(unsigned long i = 0; i < actions.size(); i++){
-    int nextValue = choose_move(state->next_state(actions[i]), depth, -10000, 10000, true);
+    int nextValue = choose_move(state->next_state(actions[i]), depth, -10000, 10000, false);
     if(nextValue > maxValue){  // tmp > maxValue
       num = i;
       maxValue = nextValue;
@@ -58,7 +56,7 @@ int Player::choose_move(State *state, int depth, int alpha, int beta, int isMini
     for(unsigned long i = 0; i < actions.size(); i++){
       int nextValue = choose_move(state->next_state(actions[i]), depth - 1, alpha, beta, true);
       minValue = std::min(minValue, nextValue);
-      beta = std::min(alpha, minValue);
+      beta = std::min(beta, minValue);
       if(beta <= alpha)
         break;
     }

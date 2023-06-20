@@ -17,7 +17,7 @@ int State::evaluate(){
   int white = countMaterial(0);
   int black = countMaterial(1);
   int evaluation = white - black;
-  return evaluation * ((player == 0) ? 1 : -1);
+  return evaluation * ((player == 0) ? -1 : 1);
 }
 
 int State::countMaterial(int color){
@@ -41,6 +41,7 @@ int State::countMaterial(int color){
           material += 900;
           break;
         case 6: // king
+          material += 10000;
           break;
         default:
           break;
