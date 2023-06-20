@@ -2,7 +2,7 @@
 #include <iostream>
 
 #include "../state/state.hpp"
-#include "./player.hpp"
+#include "./submission.hpp"
 
 
 /**
@@ -13,32 +13,45 @@
  * @return Move 
  */
 Move Player::get_move(State *state, int depth){
-  if(!state->legal_actions.size())
+    if(!state->legal_actions.size())
     state->get_legal_actions();
-  int maxValue = -100000, num = 0;
-  auto actions = state->legal_actions;
-  for(unsigned long i = 0; i < actions.size(); i++){
-    int nextValue = choose_move(state->next_state(actions[i]), depth, -10000, 10000, false);
-    if(nextValue > maxValue){  // tmp > maxValue
-      num = i;
-      maxValue = nextValue;
+    int num = 0;
+    auto actions = state->legal_actions;
+    int maxValue = -100000;
+    int minValue = 100000;
+    if((state->player == 0)){
+      for(unsigned long i = 0; i < actions.size(); i++){
+        int nextValue = choose_move(state->next_state(actions[i]), depth, -10000, 10000, false, 0);
+        if(nextValue > maxValue){  // tmp > maxValue
+          num = i;
+          maxValue = nextValue;
+        }
+      }
     }
-  }
-  return actions[num];
+    else if(state->player == 1){
+      for(unsigned long i = 0; i < actions.size(); i++){
+        int nextValue = choose_move(state->next_state(actions[i]), depth, -10000, 10000, true, 1);
+        if(nextValue < minValue){  // tmp > maxValue
+          num = i;
+          minValue = nextValue;
+        }
+      }
+    }
+    return actions[num];
 }
 
-int Player::choose_move(State *state, int depth, int alpha, int beta, int isMinimaxPlayer){
+int Player::choose_move(State *state, int depth, int alpha, int beta, int isMinimaxPlayer, int f){
   if(!state->legal_actions.size())
     state->get_legal_actions();
   
-  if(depth == 0 || state->game_state == DRAW || state->game_state == WIN)
-     return state->evaluation;
+  if(depth == 0)
+     return state->evaluation * (f ? -1 : 1);
   auto actions = state->legal_actions;
   // player
   if(isMinimaxPlayer){
     int maxValue = -100000;
     for(unsigned long i = 0; i < actions.size(); i++){
-      int nextValue = choose_move(state->next_state(actions[i]), depth - 1, alpha, beta, false);
+      int nextValue = choose_move(state->next_state(actions[i]), depth - 1, alpha, beta, false, f);
       maxValue = std::max(maxValue, nextValue);
       // parameter(參數) can be modify!!!
       alpha = std::max(alpha, maxValue);
@@ -54,7 +67,7 @@ int Player::choose_move(State *state, int depth, int alpha, int beta, int isMini
   else{
     int minValue = 100000;
     for(unsigned long i = 0; i < actions.size(); i++){
-      int nextValue = choose_move(state->next_state(actions[i]), depth - 1, alpha, beta, true);
+      int nextValue = choose_move(state->next_state(actions[i]), depth - 1, alpha, beta, true, f);
       minValue = std::min(minValue, nextValue);
       beta = std::min(beta, minValue);
       if(beta <= alpha)
